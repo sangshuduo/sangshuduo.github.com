@@ -45,12 +45,12 @@ post_asset_folder: false
 relative_link: false
 future: true
 highlight:
-  enable: true
+  enable: false
 
 prism_plugin:
   mode: 'preprocess'  #realtime/preprocess
-  theme: 'tomorrow'
-  line_number: true
+  theme: 'material-light'
+  line_number: false
   custom_css:
 
 
