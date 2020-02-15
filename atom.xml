@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://sangshuduo.github.io/"/>
-  <updated>2020-02-15T16:10:00.625Z</updated>
+  <updated>2020-02-15T16:13:22.370Z</updated>
   <id>http://sangshuduo.github.io/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="http://sangshuduo.github.io/2020/02/15/linux-de-xin-ying-jian-zhi-chi-yi-ran-shi-ge-da-keng/"/>
     <id>http://sangshuduo.github.io/2020/02/15/linux-de-xin-ying-jian-zhi-chi-yi-ran-shi-ge-da-keng/</id>
     <published>2020-02-15T14:54:42.000Z</published>
-    <updated>2020-02-15T16:10:00.625Z</updated>
+    <updated>2020-02-15T16:13:22.370Z</updated>
     
     <summary type="html">
     
@@ -37,7 +37,11 @@
     
     
     
-      <category term="Linux Hardware Compatibility" scheme="http://sangshuduo.github.io/tags/Linux-Hardware-Compatibility/"/>
+      <category term="Linux" scheme="http://sangshuduo.github.io/tags/Linux/"/>
+    
+      <category term="Hardware" scheme="http://sangshuduo.github.io/tags/Hardware/"/>
+    
+      <category term="Compatibility" scheme="http://sangshuduo.github.io/tags/Compatibility/"/>
     
   </entry>
   
