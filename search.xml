@@ -11,10 +11,18 @@
         <content type="html"><![CDATA[<p>最近需要在Linux系统上操练一些事，自己的14mid的MBP说实话并不慢，但是毕竟硬盘内存都不能放手去鼓捣，想干脆买台新电脑算了。这种专用的电脑自然没必要买笔记本，性价比不高。就随便在jd上找了一台所谓的工作站，512G SSD+1T，32G内存，一段时间内足够用了。</p><p>疫情原因，电脑送来略迟一两天。送来了，发现标配没有DP线。又下单DP线，这个倒快，第二天就送到了。</p><p>电脑自然奉送Win10家庭版。我还是要用Linux。Ubuntu，20.04 daily，还差2个月release，拿来用应该没大问题。</p><p>Windows里缩小原来的分区，给Linux留空间，然后拿U盘安装双系统，分区要选手动，结果发现只找到一个机械硬盘。这样最后grub会安装失败，系统启动不了。</p><p><img src="/2020/02/15/linux-de-xin-ying-jian-zhi-chi-yi-ran-shi-ge-da-keng/grub-failure.jpeg" alt=""></p><p>Google，发现原来NVME的SSD要改BIOS，把RAID改成AHCI。还要Windows切安全模式再切回来。</p><p>改好，顺便把BIOS再改的更顺手些，把Legacy打开，关Security Boot。</p><p>再装，在分区前出了一个对话框，提示了6个？</p><p><img src="/2020/02/15/linux-de-xin-ying-jian-zhi-chi-yi-ran-shi-ge-da-keng/questionsmark.jpeg" alt=""></p><p>再Google，发现前人已经遇到类似问题，各种技巧，启动的时候要改启动命令行，加 nvme_load=YES，改。</p><p>改了，还不行，各种Google，Dell网站上面的知识库明显是机器翻译的，矛盾，而且过时了。</p><p>最后求教Canonical的老同事，得知这个Intel SSD的RAID和Linux AHCI不兼容，暂时没有办法装双系统，如果只装Ubuntu需要gpartd格式化硬盘。</p><p>再观察一下，先拿VirtualBox顶一下，怎么说8核i7加32G内存的机器，分给VirtualBox一半也还不算弱。</p><p>只是没想到，2020年了Linux的硬件兼容性还是要提前考虑的问题！</p>]]></content>
       
       
+      <categories>
+          
+          <category> Linux系统 </category>
+          
+      </categories>
+      
       
         <tags>
             
             <tag> Linux </tag>
+            
+            <tag> Ubuntu </tag>
             
             <tag> Hardware </tag>
             
