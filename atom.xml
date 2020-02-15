@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://sangshuduo.github.io/"/>
-  <updated>2020-02-11T06:28:11.944Z</updated>
+  <updated>2020-02-15T16:10:00.625Z</updated>
   <id>http://sangshuduo.github.io/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Linux的新硬件支持依然是个大坑</title>
+    <link href="http://sangshuduo.github.io/2020/02/15/linux-de-xin-ying-jian-zhi-chi-yi-ran-shi-ge-da-keng/"/>
+    <id>http://sangshuduo.github.io/2020/02/15/linux-de-xin-ying-jian-zhi-chi-yi-ran-shi-ge-da-keng/</id>
+    <published>2020-02-15T14:54:42.000Z</published>
+    <updated>2020-02-15T16:10:00.625Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;最近需要在Linux系统上操练一些事，自己的14mid的MBP说实话并不慢，但是毕竟硬盘内存都不能放手去鼓捣，想干脆买台新电脑算了。这种专用的电脑自然没必要买笔记本，性价比不高。就随便在jd上找了一台所谓的工作站，512G
+        
+      
+    
+    </summary>
+    
+    
+    
+      <category term="Linux Hardware Compatibility" scheme="http://sangshuduo.github.io/tags/Linux-Hardware-Compatibility/"/>
+    
+  </entry>
   
   <entry>
     <title>Hello World</title>
