@@ -41,7 +41,7 @@ external_link:
   exclude: ''
 filename_case: 0
 render_drafts: false
-post_asset_folder: false
+post_asset_folder: true
 relative_link: false
 future: true
 highlight:
@@ -129,3 +129,9 @@ feed:
   content_limit: 140
   content_limit_delim: ' '
   order_by: -date
+
+# Disqus
+disqus:
+  enable: true
+  shortname: shuduos-blog
+  count: true
