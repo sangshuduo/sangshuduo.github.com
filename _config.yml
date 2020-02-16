@@ -130,8 +130,3 @@ feed:
   content_limit_delim: ' '
   order_by: -date
 
-# Disqus
-disqus:
-  enable: true
-  shortname: shuduos-blog
-  count: true
