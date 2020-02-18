@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://sangshuduo.github.io/"/>
-  <updated>2020-02-15T16:15:52.998Z</updated>
+  <updated>2020-02-18T15:12:21.288Z</updated>
   <id>http://sangshuduo.github.io/</id>
   
   <author>
@@ -15,6 +15,37 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>如何在Windows 10家庭版安装Docker for Windows</title>
+    <link href="http://sangshuduo.github.io/2020/02/18/ru-he-zai-windows-10-jia-ting-ban-an-zhuang-docker-for-windows/"/>
+    <id>http://sangshuduo.github.io/2020/02/18/ru-he-zai-windows-10-jia-ting-ban-an-zhuang-docker-for-windows/</id>
+    <published>2020-02-18T14:25:21.000Z</published>
+    <updated>2020-02-18T15:12:21.288Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;前面写到买了台无法装Linux双系统的新电脑，预装Windows 10家庭版。因为要折腾，即使无法双系统启动原生Linux，也要想办法折腾其他方法装Linux。装了VirtualBox跑Ubuntu，也装了Linux Bash on Ubuntu On Windows
+        
+      
+    
+    </summary>
+    
+    
+      <category term="Windows系统" scheme="http://sangshuduo.github.io/categories/Windows%E7%B3%BB%E7%BB%9F/"/>
+    
+    
+      <category term="Windows" scheme="http://sangshuduo.github.io/tags/Windows/"/>
+    
+      <category term="Docker" scheme="http://sangshuduo.github.io/tags/Docker/"/>
+    
+      <category term="Hack" scheme="http://sangshuduo.github.io/tags/Hack/"/>
+    
+  </entry>
   
   <entry>
     <title>Linux的新硬件支持依然是个大坑</title>
