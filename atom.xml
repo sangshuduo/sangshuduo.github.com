@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://sangshuduo.github.io/"/>
-  <updated>2020-02-18T15:12:21.288Z</updated>
+  <updated>2020-02-23T16:29:27.968Z</updated>
   <id>http://sangshuduo.github.io/</id>
   
   <author>
@@ -15,6 +15,36 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Jenkins 插件镜像 配置方法</title>
+    <link href="http://sangshuduo.github.io/2020/02/24/jenkins-cha-jian-jing-xiang-pei-zhi-fang-fa/"/>
+    <id>http://sangshuduo.github.io/2020/02/24/jenkins-cha-jian-jing-xiang-pei-zhi-fang-fa/</id>
+    <published>2020-02-23T16:07:32.000Z</published>
+    <updated>2020-02-23T16:29:27.968Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;网上有大量的如果加速Jenkins插件安装的博客帖子，怀疑大部分都没有自己验证过，抄来抄去。&lt;/p&gt;
+&lt;p&gt;实际真正的步骤应该是：&lt;/p&gt;
+&lt;p&gt;基础发行版是Ubuntu 20.04&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ wget -q -O -
+        
+      
+    
+    </summary>
+    
+    
+      <category term="CI-CD" scheme="http://sangshuduo.github.io/categories/CI-CD/"/>
+    
+    
+      <category term="Jenkins" scheme="http://sangshuduo.github.io/tags/Jenkins/"/>
+    
+  </entry>
   
   <entry>
     <title>如何在Windows 10家庭版安装Docker for Windows</title>

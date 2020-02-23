@@ -4,8 +4,11 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="如何在Windows 10家庭版安装Docker for Windows, Shuduo&#39;s Blog">
-    <meta name="description" content="前面写到买了台无法装Linux双系统的新电脑，预装Windows 10家庭版。因为要折腾，即使无法双系统启动原生Linux，也要想办法折腾其他方法装Linux。装了VirtualBox跑Ubuntu，也装了Linux Bash on Ubu">
+    <meta name="keywords" content="Jenkins 插件镜像 配置方法, Shuduo&#39;s Blog">
+    <meta name="description" content="网上有大量的如果加速Jenkins插件安装的博客帖子，怀疑大部分都没有自己验证过，抄来抄去。
+实际真正的步骤应该是：
+基础发行版是Ubuntu 20.04
+$ wget -q -O - https://pkg.jenkins.io/debi">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -13,7 +16,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>如何在Windows 10家庭版安装Docker for Windows | Shuduo&#39;s Blog</title>
+    <title>Jenkins 插件镜像 配置方法 | Shuduo&#39;s Blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -304,12 +307,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/0.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/12.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">如何在Windows 10家庭版安装Docker for Windows</h1>
+                    <h1 class="description center-align post-title">Jenkins 插件镜像 配置方法</h1>
                 </div>
             </div>
         </div>
@@ -426,16 +429,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/Windows/">
-                                <span class="chip bg-color">Windows</span>
-                            </a>
-                        
-                            <a href="/tags/Docker/">
-                                <span class="chip bg-color">Docker</span>
-                            </a>
-                        
-                            <a href="/tags/Hack/">
-                                <span class="chip bg-color">Hack</span>
+                            <a href="/tags/Jenkins/">
+                                <span class="chip bg-color">Jenkins</span>
                             </a>
                         
                     </div>
@@ -446,8 +441,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/Windows%E7%B3%BB%E7%BB%9F/" class="post-category">
-                                Windows系统
+                            <a href="/categories/CI-CD/" class="post-category">
+                                CI-CD
                             </a>
                         
                     </div>
@@ -459,7 +454,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2020-02-18
+                    2020-02-24
                 </div>
                 
 
@@ -476,33 +471,22 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>前面写到买了台无法装Linux双系统的新电脑，预装Windows 10家庭版。因为要折腾，即使无法双系统启动原生Linux，也要想办法折腾其他方法装Linux。装了VirtualBox跑Ubuntu，也装了Linux Bash on Ubuntu On Windows 10。之前还装过Docker for Windows，没想到跑不起来，说家庭版不能跑。骂微软鸡贼，非要区分各种版本，做功能阉割。</p>
-<p>今天偶然发现有人鼓捣出hack方法，让Docker以为是Professional版本。于是也跟着探索了一下。最后结合中外高人Blog，也鼓捣成了。</p>
-<p>代码如下：</p>
-<pre><code>pushd &quot;%~dp0&quot;
-
-dir /b %SystemRoot%\servicing\Packages\*Hyper-V*.mum &gt;hyper-v.txt
-
-for /f %%i in (&#39;findstr /i . hyper-v.txt 2^&gt;nul&#39;) do dism /online /norestart /add-package:&quot;%SystemRoot%\servicing\Packages\%%i&quot;
-
-del hyper-v.txt
-
-Dism /online /enable-feature /featurename:Microsoft-Hyper-V -All /LimitAccess /ALL
-
-
-dir /b %SystemRoot%\servicing\Packages\*containers*.mum &gt;containers.txt
-
-for /f %%i in (&#39;findstr /i . containers.txt 2^&gt;nul&#39;) do dism /online /norestart /add-package:&quot;%SystemRoot%\servicing\Packages\%%i&quot;
-
-del containers.txt
-
-Dism /online /enable-feature /featurename:Containers -All /LimitAccess /ALL%</code></pre><p>保存成一个cmd扩展名的文件，<a href="/2020/02/18/ru-he-zai-windows-10-jia-ting-ban-an-zhuang-docker-for-windows/hyperv-and-containers.cmd">鼠标右键点这里保存</a> 然后用管理员账号执行，会自动下载hyper-V和container相关组件安装。</p>
-<p>安装完会要求重启电脑。</p>
-<p>重启完电脑，在搜索框里敲“启用或关闭Windows功能”，抱歉我不知道在控制面板里怎么找到这项。会起一个对话框，把Hyper-V和容器相关打勾选上。</p>
-<p>然后再修改注册表来冒充自己是专业版</p>
-<pre><code>REG ADD &quot;HKEY_LOCAL_MACHINE\software\Microsoft\Windows NT\CurrentVersion&quot; /v EditionId /T REG_EXPAND_SZ /d Professional /F</code></pre><p>有人的电脑还要去BIOS打开Virtualization，我的默认打开了，不需要这一步。</p>
-<p>下载Docker for Windows installer，安装，完成。</p>
-<p><img src="/2020/02/18/ru-he-zai-windows-10-jia-ting-ban-an-zhuang-docker-for-windows/DockerOnWindows10HomeEdition.jpg" alt=""></p>
+                <p>网上有大量的如果加速Jenkins插件安装的博客帖子，怀疑大部分都没有自己验证过，抄来抄去。</p>
+<p>实际真正的步骤应该是：</p>
+<p>基础发行版是Ubuntu 20.04</p>
+<pre><code>$ wget -q -O - https://pkg.jenkins.io/debian/jenkins-ci.org.key | sudo apt-key add -
+$ sudo sh -c &#39;echo deb http://pkg.jenkins.io/debian-stable binary/ &gt; /etc/apt/sources.list.d/jenkins.list&#39;
+$ sudo apt-get update
+$ sudo apt-get install openjdk-8-jre
+$ sudo apt-get install jenkins</code></pre><p>默认系统里没有JDK/JRE</p>
+<p>然后修改hudson.model.UpdateCenter.xml</p>
+<pre><code>$ cd /var/lib/jenkins/
+$ vim hudson.model.UpdateCenter.xml</code></pre><p>替换原来update-center.json那一行为<a href="https://mirrors.tuna.tsinghua.edu.cn/jenkins/updates/update-center.json" target="_blank" rel="noopener">https://mirrors.tuna.tsinghua.edu.cn/jenkins/updates/update-center.json</a></p>
+<p>然后在浏览器里访问localhost:8080，假设没有修改默认端口8080。然后用 /var/lib/jenkins/secrets/initAdminPassword里的密码登陆，需要用root账号看initAdminPassword里的内容。</p>
+<p>然后在选择安装默认插件还是自选插件的界面，不要点，切换到terminal，修改updates目录里的default.json，注意之前是没有updates这个目录的。</p>
+<pre><code>$ sed -i &#39;s/http:\/\/updates.jenkins-ci.org\/download/https:\/\/mirrors.tuna.tsinghua.edu.cn\/jenkins/g&#39; default.json &amp;&amp; sed -i &#39;s/http:\/\/www.google.com/https:\/\/www.baidu.com/g&#39; default.json</code></pre><p>然后重启jenkins：</p>
+<pre><code>$ sudo service jenkins restart</code></pre><p>然后在浏览器里再刷新localhost:8080，然后再安装插件，这个时候就刷刷的快了。</p>
+<p>其他发行版或者使用配置好的Docker安装方式这里不讨论。理论上不同发行版命令和文件位置不一样，原理应该没区别。Docker是有人配置好的，自己不需要配，方便是方便，但是可能原Docker里的基础发行版是别人定的。</p>
 
             </div>
             <hr/>
@@ -528,7 +512,7 @@ Dism /online /enable-feature /featurename:Containers -All /LimitAccess /ALL%</co
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://sangshuduo.github.io/2020/02/18/ru-he-zai-windows-10-jia-ting-ban-an-zhuang-docker-for-windows/">http://sangshuduo.github.io/2020/02/18/ru-he-zai-windows-10-jia-ting-ban-an-zhuang-docker-for-windows/</a>
+                    <a href="http://sangshuduo.github.io/2020/02/24/jenkins-cha-jian-jing-xiang-pei-zhi-fang-fa/">http://sangshuduo.github.io/2020/02/24/jenkins-cha-jian-jing-xiang-pei-zhi-fang-fa/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -566,16 +550,8 @@ Dism /online /enable-feature /featurename:Containers -All /LimitAccess /ALL%</co
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/Windows/">
-                                    <span class="chip bg-color">Windows</span>
-                                </a>
-                            
-                                <a href="/tags/Docker/">
-                                    <span class="chip bg-color">Docker</span>
-                                </a>
-                            
-                                <a href="/tags/Hack/">
-                                    <span class="chip bg-color">Hack</span>
+                                <a href="/tags/Jenkins/">
+                                    <span class="chip bg-color">Jenkins</span>
                                 </a>
                             
                         </div>
@@ -741,9 +717,9 @@ Dism /online /enable-feature /featurename:Containers -All /LimitAccess /ALL%</co
 
 <script type="text/javascript">
     disqus_config = function () {
-        this.page.url = 'http://sangshuduo.github.io/2020/02/18/ru-he-zai-windows-10-jia-ting-ban-an-zhuang-docker-for-windows/';
-        this.page.identifier = '/2020/02/18/ru-he-zai-windows-10-jia-ting-ban-an-zhuang-docker-for-windows/';
-        this.page.title = '如何在Windows 10家庭版安装Docker for Windows';
+        this.page.url = 'http://sangshuduo.github.io/2020/02/24/jenkins-cha-jian-jing-xiang-pei-zhi-fang-fa/';
+        this.page.identifier = '/2020/02/24/jenkins-cha-jian-jing-xiang-pei-zhi-fang-fa/';
+        this.page.title = 'Jenkins 插件镜像 配置方法';
     };
     let disqus_shortname = 'shuduos-blog';
 
@@ -766,9 +742,10 @@ Dism /online /enable-feature /featurename:Containers -All /LimitAccess /ALL%</co
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
                 <a href="/2020/02/24/jenkins-cha-jian-jing-xiang-pei-zhi-fang-fa/">
                     <div class="card-image">
@@ -789,9 +766,9 @@ $ wget -q -O - https://pkg.jenkins.io/debi
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2020-02-24
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-02-24
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -804,6 +781,7 @@ $ wget -q -O - https://pkg.jenkins.io/debi
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -822,31 +800,31 @@ $ wget -q -O - https://pkg.jenkins.io/debi
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2020/02/15/linux-de-xin-ying-jian-zhi-chi-yi-ran-shi-ge-da-keng/">
+                <a href="/2020/02/18/ru-he-zai-windows-10-jia-ting-ban-an-zhuang-docker-for-windows/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/22.jpg" class="responsive-img" alt="Linux的新硬件支持依然是个大坑">
+                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="如何在Windows 10家庭版安装Docker for Windows">
                         
-                        <span class="card-title">Linux的新硬件支持依然是个大坑</span>
+                        <span class="card-title">如何在Windows 10家庭版安装Docker for Windows</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            最近需要在Linux系统上操练一些事，自己的14mid的MBP说实话并不慢，但是毕竟硬盘内存都不能放手去鼓捣，想干脆买台新电脑算了。这种专用的电脑自然没必要买笔记本，性价比不高。就随便在jd上找了一台所谓的工作站，512G SSD+1T，3
+                            前面写到买了台无法装Linux双系统的新电脑，预装Windows 10家庭版。因为要折腾，即使无法双系统启动原生Linux，也要想办法折腾其他方法装Linux。装了VirtualBox跑Ubuntu，也装了Linux Bash on Ubu
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-02-15
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-02-18
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/Linux%E7%B3%BB%E7%BB%9F/" class="post-category">
-                                    Linux系统
+                            <a href="/categories/Windows%E7%B3%BB%E7%BB%9F/" class="post-category">
+                                    Windows系统
                                 </a>
                             
                             
@@ -856,20 +834,16 @@ $ wget -q -O - https://pkg.jenkins.io/debi
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/Linux/">
-                        <span class="chip bg-color">Linux</span>
+                    <a href="/tags/Windows/">
+                        <span class="chip bg-color">Windows</span>
                     </a>
                     
-                    <a href="/tags/Ubuntu/">
-                        <span class="chip bg-color">Ubuntu</span>
+                    <a href="/tags/Docker/">
+                        <span class="chip bg-color">Docker</span>
                     </a>
                     
-                    <a href="/tags/Hardware/">
-                        <span class="chip bg-color">Hardware</span>
-                    </a>
-                    
-                    <a href="/tags/Compatibility/">
-                        <span class="chip bg-color">Compatibility</span>
+                    <a href="/tags/Hack/">
+                        <span class="chip bg-color">Hack</span>
                     </a>
                     
                 </div>

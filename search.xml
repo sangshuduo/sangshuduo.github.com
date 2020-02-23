@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>Jenkins 插件镜像 配置方法</title>
+      <link href="/2020/02/24/jenkins-cha-jian-jing-xiang-pei-zhi-fang-fa/"/>
+      <url>/2020/02/24/jenkins-cha-jian-jing-xiang-pei-zhi-fang-fa/</url>
+      
+        <content type="html"><![CDATA[<p>网上有大量的如果加速Jenkins插件安装的博客帖子，怀疑大部分都没有自己验证过，抄来抄去。</p><p>实际真正的步骤应该是：</p><p>基础发行版是Ubuntu 20.04</p><pre><code>$ wget -q -O - https://pkg.jenkins.io/debian/jenkins-ci.org.key | sudo apt-key add -$ sudo sh -c &#39;echo deb http://pkg.jenkins.io/debian-stable binary/ &gt; /etc/apt/sources.list.d/jenkins.list&#39;$ sudo apt-get update$ sudo apt-get install openjdk-8-jre$ sudo apt-get install jenkins</code></pre><p>默认系统里没有JDK/JRE</p><p>然后修改hudson.model.UpdateCenter.xml</p><pre><code>$ cd /var/lib/jenkins/$ vim hudson.model.UpdateCenter.xml</code></pre><p>替换原来update-center.json那一行为<a href="https://mirrors.tuna.tsinghua.edu.cn/jenkins/updates/update-center.json" target="_blank" rel="noopener">https://mirrors.tuna.tsinghua.edu.cn/jenkins/updates/update-center.json</a></p><p>然后在浏览器里访问localhost:8080，假设没有修改默认端口8080。然后用 /var/lib/jenkins/secrets/initAdminPassword里的密码登陆，需要用root账号看initAdminPassword里的内容。</p><p>然后在选择安装默认插件还是自选插件的界面，不要点，切换到terminal，修改updates目录里的default.json，注意之前是没有updates这个目录的。</p><pre><code>$ sed -i &#39;s/http:\/\/updates.jenkins-ci.org\/download/https:\/\/mirrors.tuna.tsinghua.edu.cn\/jenkins/g&#39; default.json &amp;&amp; sed -i &#39;s/http:\/\/www.google.com/https:\/\/www.baidu.com/g&#39; default.json</code></pre><p>然后重启jenkins：</p><pre><code>$ sudo service jenkins restart</code></pre><p>然后在浏览器里再刷新localhost:8080，然后再安装插件，这个时候就刷刷的快了。</p><p>其他发行版或者使用配置好的Docker安装方式这里不讨论。理论上不同发行版命令和文件位置不一样，原理应该没区别。Docker是有人配置好的，自己不需要配，方便是方便，但是可能原Docker里的基础发行版是别人定的。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> CI-CD </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Jenkins </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>如何在Windows 10家庭版安装Docker for Windows</title>
       <link href="/2020/02/18/ru-he-zai-windows-10-jia-ting-ban-an-zhuang-docker-for-windows/"/>
       <url>/2020/02/18/ru-he-zai-windows-10-jia-ting-ban-an-zhuang-docker-for-windows/</url>
