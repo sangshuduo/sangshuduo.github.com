@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://sangshuduo.github.io/"/>
-  <updated>2020-02-23T16:29:27.968Z</updated>
+  <updated>2020-03-29T15:05:32.128Z</updated>
   <id>http://sangshuduo.github.io/</id>
   
   <author>
@@ -15,6 +15,38 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>如何使用 Travis 进行 GO 项目的 CI 自动测试</title>
+    <link href="http://sangshuduo.github.io/2020/03/29/ru-he-shi-yong-travis-jin-xing-go-xiang-mu-de-ci-zi-dong-ce-shi/"/>
+    <id>http://sangshuduo.github.io/2020/03/29/ru-he-shi-yong-travis-jin-xing-go-xiang-mu-de-ci-zi-dong-ce-shi/</id>
+    <published>2020-03-29T14:51:16.000Z</published>
+    <updated>2020-03-29T15:05:32.128Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;写了一个小程序模拟类似的 CGO 项目如何利用 CI 服务进行自动测试。&lt;/p&gt;
+&lt;p&gt;代码在： &lt;a href=&quot;https://github.com/sangshuduo/cgo_ci_helloworld&quot; target=&quot;_blank&quot;
+        
+      
+    
+    </summary>
+    
+    
+      <category term="CI-CD" scheme="http://sangshuduo.github.io/categories/CI-CD/"/>
+    
+    
+      <category term="golang" scheme="http://sangshuduo.github.io/tags/golang/"/>
+    
+      <category term="travis" scheme="http://sangshuduo.github.io/tags/travis/"/>
+    
+      <category term="CodeClimate" scheme="http://sangshuduo.github.io/tags/CodeClimate/"/>
+    
+  </entry>
   
   <entry>
     <title>Jenkins 插件镜像 配置方法</title>
