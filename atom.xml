@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://sangshuduo.github.io/"/>
-  <updated>2020-03-29T15:05:32.128Z</updated>
+  <updated>2020-04-03T12:28:50.701Z</updated>
   <id>http://sangshuduo.github.io/</id>
   
   <author>
@@ -15,6 +15,38 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>strncpy 的小实验</title>
+    <link href="http://sangshuduo.github.io/2020/04/03/strncpy-de-xiao-shi-yan/"/>
+    <id>http://sangshuduo.github.io/2020/04/03/strncpy-de-xiao-shi-yan/</id>
+    <published>2020-04-03T11:03:50.000Z</published>
+    <updated>2020-04-03T12:28:50.701Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;最近用 Coverity Scan 扫描代码，其中对 strncpy 的使用做了警告&lt;br&gt;&lt;img src=&quot;/2020/04/03/strncpy-de-xiao-shi-yan/IMG_4269.JPG&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;之前知道 C
+        
+      
+    
+    </summary>
+    
+    
+      <category term="安全" scheme="http://sangshuduo.github.io/categories/%E5%AE%89%E5%85%A8/"/>
+    
+    
+      <category term="C" scheme="http://sangshuduo.github.io/tags/C/"/>
+    
+      <category term="gcc" scheme="http://sangshuduo.github.io/tags/gcc/"/>
+    
+      <category term="clang" scheme="http://sangshuduo.github.io/tags/clang/"/>
+    
+  </entry>
   
   <entry>
     <title>如何使用 Travis 进行 GO 项目的 CI 自动测试</title>

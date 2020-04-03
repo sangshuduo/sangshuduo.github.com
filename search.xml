@@ -4,6 +4,35 @@
   
     
     <entry>
+      <title>strncpy 的小实验</title>
+      <link href="/2020/04/03/strncpy-de-xiao-shi-yan/"/>
+      <url>/2020/04/03/strncpy-de-xiao-shi-yan/</url>
+      
+        <content type="html"><![CDATA[<p>最近用 Coverity Scan 扫描代码，其中对 strncpy 的使用做了警告<br><img src="/2020/04/03/strncpy-de-xiao-shi-yan/IMG_4269.JPG" alt=""></p><p>之前知道 C 语言里字符操作坑很多。很多函数不安全，要用带 n 的函数。以为 strcpy 不安全，可以用 strncpy。但实际上 strncpy 用的不小心也不是那么安全。</p><p>手册说明：</p><pre><code>DESCRIPTION     The stpcpy() and strcpy() functions copy the string src to dst (including the terminating `\0&#39; character.)     The stpncpy() and strncpy() functions copy at most len characters from src into dst.  If src is less than len     characters long, the remainder of dst is filled with `\0&#39; characters.  Otherwise, dst is not terminated.     The source and destination strings should not overlap, as the behavior is undefined.</code></pre><p>于是做了个小实验</p><pre><code>#include &lt;stdio.h&gt;#include &lt;string.h&gt;#include &lt;stdlib.h&gt;typedef struct dstBuf {    char begin[6];    char dst[6];    char end[6];} Buf;int main(){    char src[8] = &quot;abcdefgh&quot;;    Buf *buf = malloc(sizeof(Buf));    memset(buf, &#39;#&#39;, sizeof(Buf));    Buf *buf1 = malloc(sizeof(Buf));    memset(buf1, &#39;#&#39;, sizeof(Buf));    Buf *buf2 = malloc(sizeof(Buf));    memset(buf2, &#39;#&#39;, sizeof(Buf));    printf(&quot;strncpy n-1 before: buf-&gt;begin is %s\n&quot;, buf-&gt;begin);    printf(&quot;strncpy n-1 before: buf-&gt;dst is %s\n&quot;, buf-&gt;dst);    printf(&quot;strncpy n-1 before: buf-&gt;end is %s\n&quot;, buf-&gt;end);    strncpy(buf-&gt;dst, src, 5);    printf(&quot;strncpy n-1 after: buf-&gt;begin is %s\n&quot;, buf-&gt;begin);    printf(&quot;strncpy n-1 after: buf-&gt;dst is %s\n&quot;, buf-&gt;dst);    printf(&quot;strncpy n-1 after: buf-&gt;end is %s\n&quot;, buf-&gt;end);    free(buf);    printf(&quot;strncpy n before: buf1-&gt;begin is %s\n&quot;, buf1-&gt;begin);    printf(&quot;strncpy n before: buf1-&gt;begin is %s\n&quot;, buf1-&gt;dst);    printf(&quot;strncpy n before: buf1-&gt;end is %s\n&quot;, buf1-&gt;end);    strncpy(buf1-&gt;dst, src, 6);    printf(&quot;strncpy n after: buf1-&gt;begin is %s\n&quot;, buf1-&gt;begin);    printf(&quot;strncpy n after: buf1-&gt;dst is %s\n&quot;, buf1-&gt;dst);    printf(&quot;strncpy n after: buf1-&gt;end is %s\n&quot;, buf1-&gt;end);    free(buf1);    printf(&quot;strcpy before: buf2-&gt;begin is %s\n&quot;, buf2-&gt;begin);    printf(&quot;strcpy before: buf2-&gt;dst is %s\n&quot;, buf2-&gt;dst);    printf(&quot;strcpy before: buf2-&gt;end is %s\n&quot;, buf2-&gt;end);    strcpy(buf2-&gt;dst, src);    printf(&quot;strcpy after: buf2-&gt;begin is %s\n&quot;, buf2-&gt;begin);    printf(&quot;strcpy after: buf2-&gt;dst is %s\n&quot;, buf2-&gt;dst);    printf(&quot;strcpy after: buf2-&gt;end is %s\n&quot;, buf2-&gt;end);    free(buf2);    return 0;}</code></pre><p>OS X / clang编译输出结果：</p><pre><code>$ ./test-strncpystrncpy n-1 before: buf-&gt;begin is ##################strncpy n-1 before: buf-&gt;dst is ############strncpy n-1 before: buf-&gt;end is ######strncpy n-1 after: buf-&gt;begin is ######abcde#######strncpy n-1 after: buf-&gt;dst is abcde#######strncpy n-1 after: buf-&gt;end is ######strncpy n before: buf1-&gt;begin is ##################strncpy n before: buf1-&gt;begin is ############strncpy n before: buf1-&gt;end is ######strncpy n after: buf1-&gt;begin is ######abcdef######strncpy n after: buf1-&gt;dst is abcdef######strncpy n after: buf1-&gt;end is ######strcpy before: buf2-&gt;begin is ##################strcpy before: buf2-&gt;dst is ############strcpy before: buf2-&gt;end is ######[1]    85196 illegal hardware instruction  ./test-strncpy</code></pre><p>Linux (Ubuntu 20.04) gcc 编译结果（居然略有不同）：</p><pre><code>$ ./test-strncpystrncpy n-1 before: buf-&gt;begin is ##################strncpy n-1 before: buf-&gt;dst is ############strncpy n-1 before: buf-&gt;end is ######strncpy n-1 after: buf-&gt;begin is ######abcde#######strncpy n-1 after: buf-&gt;dst is abcde#######strncpy n-1 after: buf-&gt;end is ######strncpy n before: buf1-&gt;begin is ##################strncpy n before: buf1-&gt;begin is ############strncpy n before: buf1-&gt;end is ######strncpy n after: buf1-&gt;begin is ######abcdef######strncpy n after: buf1-&gt;dst is abcdef######strncpy n after: buf1-&gt;end is ######strcpy before: buf2-&gt;begin is ##################strcpy before: buf2-&gt;dst is ############strcpy before: buf2-&gt;end is ######strcpy after: buf2-&gt;begin is ######abcdefghstrcpy after: buf2-&gt;dst is abcdefghstrcpy after: buf2-&gt;end is gh</code></pre><p>直接看结果，就不解释了</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 安全 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> C </tag>
+            
+            <tag> gcc </tag>
+            
+            <tag> clang </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>如何使用 Travis 进行 GO 项目的 CI 自动测试</title>
       <link href="/2020/03/29/ru-he-shi-yong-travis-jin-xing-go-xiang-mu-de-ci-zi-dong-ce-shi/"/>
       <url>/2020/03/29/ru-he-shi-yong-travis-jin-xing-go-xiang-mu-de-ci-zi-dong-ce-shi/</url>
