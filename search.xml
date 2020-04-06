@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>在 cmake 中为个别文件单独指定编译选项的方法</title>
+      <link href="/2020/04/06/zai-cmake-zhong-wei-ge-bie-wen-jian-dan-du-zhi-ding-bian-yi-xuan-xiang-de-fang-fa/"/>
+      <url>/2020/04/06/zai-cmake-zhong-wei-ge-bie-wen-jian-dan-du-zhi-ding-bian-yi-xuan-xiang-de-fang-fa/</url>
+      
+        <content type="html"><![CDATA[<p>搜能搜到 StackOverflow 上很多回复，实际用还是尝试了一下午。<br>重点是要在合适的目录下的 CMakeLists.txt 中改，并且要带合适的路径。<br>因为折腾的时间比较多，赶紧记下来，免得想不起来。</p><p>SET_SOURCE_FILES_PROPERTIES(src/sql.c PROPERTIES COMPILE_FLAGS -w)</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> CI-CD </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> compiler </tag>
+            
+            <tag> cmake </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>strncpy 的小实验</title>
       <link href="/2020/04/03/strncpy-de-xiao-shi-yan/"/>
       <url>/2020/04/03/strncpy-de-xiao-shi-yan/</url>

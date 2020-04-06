@@ -4,9 +4,9 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="strncpy 的小实验, Shuduo&#39;s Blog">
-    <meta name="description" content="最近用 Coverity Scan 扫描代码，其中对 strncpy 的使用做了警告
-之前知道 C 语言里字符操作坑很多。很多函数不安全，要用带 n 的函数。以为 strcpy 不安全，可以用 strncpy。但实际上 strncpy 用的">
+    <meta name="keywords" content="在 cmake 中为个别文件单独指定编译选项的方法, Shuduo&#39;s Blog">
+    <meta name="description" content="搜能搜到 StackOverflow 上很多回复，实际用还是尝试了一下午。重点是要在合适的目录下的 CMakeLists.txt 中改，并且要带合适的路径。因为折腾的时间比较多，赶紧记下来，免得想不起来。
+SET_SOURCE_FILES_">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -14,7 +14,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>strncpy 的小实验 | Shuduo&#39;s Blog</title>
+    <title>在 cmake 中为个别文件单独指定编译选项的方法 | Shuduo&#39;s Blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -305,12 +305,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/14.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/1.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">strncpy 的小实验</h1>
+                    <h1 class="description center-align post-title">在 cmake 中为个别文件单独指定编译选项的方法</h1>
                 </div>
             </div>
         </div>
@@ -427,16 +427,12 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/C/">
-                                <span class="chip bg-color">C</span>
+                            <a href="/tags/compiler/">
+                                <span class="chip bg-color">compiler</span>
                             </a>
                         
-                            <a href="/tags/gcc/">
-                                <span class="chip bg-color">gcc</span>
-                            </a>
-                        
-                            <a href="/tags/clang/">
-                                <span class="chip bg-color">clang</span>
+                            <a href="/tags/cmake/">
+                                <span class="chip bg-color">cmake</span>
                             </a>
                         
                     </div>
@@ -447,8 +443,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/%E5%AE%89%E5%85%A8/" class="post-category">
-                                安全
+                            <a href="/categories/CI-CD/" class="post-category">
+                                CI-CD
                             </a>
                         
                     </div>
@@ -460,7 +456,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2020-04-03
+                    2020-04-06
                 </div>
                 
 
@@ -477,106 +473,8 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>最近用 Coverity Scan 扫描代码，其中对 strncpy 的使用做了警告<br><img src="/2020/04/03/strncpy-de-xiao-shi-yan/IMG_4269.JPG" alt=""></p>
-<p>之前知道 C 语言里字符操作坑很多。很多函数不安全，要用带 n 的函数。以为 strcpy 不安全，可以用 strncpy。但实际上 strncpy 用的不小心也不是那么安全。</p>
-<p>手册说明：</p>
-<pre><code>DESCRIPTION
-     The stpcpy() and strcpy() functions copy the string src to dst (including the terminating `\0&#39; character.)
-
-     The stpncpy() and strncpy() functions copy at most len characters from src into dst.  If src is less than len
-     characters long, the remainder of dst is filled with `\0&#39; characters.  Otherwise, dst is not terminated.
-
-     The source and destination strings should not overlap, as the behavior is undefined.</code></pre><p>于是做了个小实验</p>
-<pre><code>#include &lt;stdio.h&gt;
-#include &lt;string.h&gt;
-#include &lt;stdlib.h&gt;
-
-typedef struct dstBuf {
-    char begin[6];
-    char dst[6];
-    char end[6];
-} Buf;
-
-int main()
-{
-    char src[8] = &quot;abcdefgh&quot;;
-    Buf *buf = malloc(sizeof(Buf));
-    memset(buf, &#39;#&#39;, sizeof(Buf));
-
-    Buf *buf1 = malloc(sizeof(Buf));
-    memset(buf1, &#39;#&#39;, sizeof(Buf));
-
-    Buf *buf2 = malloc(sizeof(Buf));
-    memset(buf2, &#39;#&#39;, sizeof(Buf));
-
-    printf(&quot;strncpy n-1 before: buf-&gt;begin is %s\n&quot;, buf-&gt;begin);
-    printf(&quot;strncpy n-1 before: buf-&gt;dst is %s\n&quot;, buf-&gt;dst);
-    printf(&quot;strncpy n-1 before: buf-&gt;end is %s\n&quot;, buf-&gt;end);
-    strncpy(buf-&gt;dst, src, 5);
-    printf(&quot;strncpy n-1 after: buf-&gt;begin is %s\n&quot;, buf-&gt;begin);
-    printf(&quot;strncpy n-1 after: buf-&gt;dst is %s\n&quot;, buf-&gt;dst);
-    printf(&quot;strncpy n-1 after: buf-&gt;end is %s\n&quot;, buf-&gt;end);
-
-    free(buf);
-
-    printf(&quot;strncpy n before: buf1-&gt;begin is %s\n&quot;, buf1-&gt;begin);
-    printf(&quot;strncpy n before: buf1-&gt;dst is %s\n&quot;, buf1-&gt;dst);
-    printf(&quot;strncpy n before: buf1-&gt;end is %s\n&quot;, buf1-&gt;end);
-    strncpy(buf1-&gt;dst, src, 6);
-    printf(&quot;strncpy n after: buf1-&gt;begin is %s\n&quot;, buf1-&gt;begin);
-    printf(&quot;strncpy n after: buf1-&gt;dst is %s\n&quot;, buf1-&gt;dst);
-    printf(&quot;strncpy n after: buf1-&gt;end is %s\n&quot;, buf1-&gt;end);
-
-    free(buf1);
-
-    printf(&quot;strcpy before: buf2-&gt;begin is %s\n&quot;, buf2-&gt;begin);
-    printf(&quot;strcpy before: buf2-&gt;dst is %s\n&quot;, buf2-&gt;dst);
-    printf(&quot;strcpy before: buf2-&gt;end is %s\n&quot;, buf2-&gt;end);
-    strcpy(buf2-&gt;dst, src);
-    printf(&quot;strcpy after: buf2-&gt;begin is %s\n&quot;, buf2-&gt;begin);
-    printf(&quot;strcpy after: buf2-&gt;dst is %s\n&quot;, buf2-&gt;dst);
-    printf(&quot;strcpy after: buf2-&gt;end is %s\n&quot;, buf2-&gt;end);
-
-    free(buf2);
-
-    return 0;
-}</code></pre><p>OS X / clang编译输出结果：</p>
-<pre><code>$ ./test-strncpy
-strncpy n-1 before: buf-&gt;begin is ##################
-strncpy n-1 before: buf-&gt;dst is ############
-strncpy n-1 before: buf-&gt;end is ######
-strncpy n-1 after: buf-&gt;begin is ######abcde#######
-strncpy n-1 after: buf-&gt;dst is abcde#######
-strncpy n-1 after: buf-&gt;end is ######
-strncpy n before: buf1-&gt;begin is ##################
-strncpy n before: buf1-&gt;dst is ############
-strncpy n before: buf1-&gt;end is ######
-strncpy n after: buf1-&gt;begin is ######abcdef######
-strncpy n after: buf1-&gt;dst is abcdef######
-strncpy n after: buf1-&gt;end is ######
-strcpy before: buf2-&gt;begin is ##################
-strcpy before: buf2-&gt;dst is ############
-strcpy before: buf2-&gt;end is ######
-[1]    85196 illegal hardware instruction  ./test-strncpy</code></pre><p>Linux (Ubuntu 20.04) gcc 编译结果（居然略有不同）：</p>
-<pre><code>$ ./test-strncpy
-strncpy n-1 before: buf-&gt;begin is ##################
-strncpy n-1 before: buf-&gt;dst is ############
-strncpy n-1 before: buf-&gt;end is ######
-strncpy n-1 after: buf-&gt;begin is ######abcde#######
-strncpy n-1 after: buf-&gt;dst is abcde#######
-strncpy n-1 after: buf-&gt;end is ######
-strncpy n before: buf1-&gt;begin is ##################
-strncpy n before: buf1-&gt;begin is ############
-strncpy n before: buf1-&gt;end is ######
-strncpy n after: buf1-&gt;begin is ######abcdef######
-strncpy n after: buf1-&gt;dst is abcdef######
-strncpy n after: buf1-&gt;end is ######
-strcpy before: buf2-&gt;begin is ##################
-strcpy before: buf2-&gt;dst is ############
-strcpy before: buf2-&gt;end is ######
-strcpy after: buf2-&gt;begin is ######abcdefgh
-strcpy after: buf2-&gt;dst is abcdefgh
-strcpy after: buf2-&gt;end is gh</code></pre><p>直接看结果，就不解释了</p>
+                <p>搜能搜到 StackOverflow 上很多回复，实际用还是尝试了一下午。<br>重点是要在合适的目录下的 CMakeLists.txt 中改，并且要带合适的路径。<br>因为折腾的时间比较多，赶紧记下来，免得想不起来。</p>
+<p>SET_SOURCE_FILES_PROPERTIES(src/sql.c PROPERTIES COMPILE_FLAGS -w)</p>
 
             </div>
             <hr/>
@@ -602,7 +500,7 @@ strcpy after: buf2-&gt;end is gh</code></pre><p>直接看结果，就不解释�
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://sangshuduo.github.io/2020/04/03/strncpy-de-xiao-shi-yan/">http://sangshuduo.github.io/2020/04/03/strncpy-de-xiao-shi-yan/</a>
+                    <a href="http://sangshuduo.github.io/2020/04/06/zai-cmake-zhong-wei-ge-bie-wen-jian-dan-du-zhi-ding-bian-yi-xuan-xiang-de-fang-fa/">http://sangshuduo.github.io/2020/04/06/zai-cmake-zhong-wei-ge-bie-wen-jian-dan-du-zhi-ding-bian-yi-xuan-xiang-de-fang-fa/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -640,16 +538,12 @@ strcpy after: buf2-&gt;end is gh</code></pre><p>直接看结果，就不解释�
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/C/">
-                                    <span class="chip bg-color">C</span>
+                                <a href="/tags/compiler/">
+                                    <span class="chip bg-color">compiler</span>
                                 </a>
                             
-                                <a href="/tags/gcc/">
-                                    <span class="chip bg-color">gcc</span>
-                                </a>
-                            
-                                <a href="/tags/clang/">
-                                    <span class="chip bg-color">clang</span>
+                                <a href="/tags/cmake/">
+                                    <span class="chip bg-color">cmake</span>
                                 </a>
                             
                         </div>
@@ -815,9 +709,9 @@ strcpy after: buf2-&gt;end is gh</code></pre><p>直接看结果，就不解释�
 
 <script type="text/javascript">
     disqus_config = function () {
-        this.page.url = 'http://sangshuduo.github.io/2020/04/03/strncpy-de-xiao-shi-yan/';
-        this.page.identifier = '/2020/04/03/strncpy-de-xiao-shi-yan/';
-        this.page.title = 'strncpy 的小实验';
+        this.page.url = 'http://sangshuduo.github.io/2020/04/06/zai-cmake-zhong-wei-ge-bie-wen-jian-dan-du-zhi-ding-bian-yi-xuan-xiang-de-fang-fa/';
+        this.page.identifier = '/2020/04/06/zai-cmake-zhong-wei-ge-bie-wen-jian-dan-du-zhi-ding-bian-yi-xuan-xiang-de-fang-fa/';
+        this.page.title = '在 cmake 中为个别文件单独指定编译选项的方法';
     };
     let disqus_shortname = 'shuduos-blog';
 
@@ -840,9 +734,10 @@ strcpy after: buf2-&gt;end is gh</code></pre><p>直接看结果，就不解释�
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
                 <a href="/2020/04/06/zai-cmake-zhong-wei-ge-bie-wen-jian-dan-du-zhi-ding-bian-yi-xuan-xiang-de-fang-fa/">
                     <div class="card-image">
@@ -861,9 +756,9 @@ SET_SOURCE_FILES_
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2020-04-06
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-04-06
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -876,6 +771,7 @@ SET_SOURCE_FILES_
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -898,33 +794,32 @@ SET_SOURCE_FILES_
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2020/03/29/ru-he-shi-yong-travis-jin-xing-go-xiang-mu-de-ci-zi-dong-ce-shi/">
+                <a href="/2020/04/03/strncpy-de-xiao-shi-yan/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/23.jpg" class="responsive-img" alt="如何使用 Travis 进行 GO 项目的 CI 自动测试">
+                        <img src="/medias/featureimages/14.jpg" class="responsive-img" alt="strncpy 的小实验">
                         
-                        <span class="card-title">如何使用 Travis 进行 GO 项目的 CI 自动测试</span>
+                        <span class="card-title">strncpy 的小实验</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            写了一个小程序模拟类似的 CGO 项目如何利用 CI 服务进行自动测试。
-代码在： https://github.com/sangshuduo/cgo_ci_helloworld
-由于 Go 从语言层面内置原生测试框架，仅需要添加很少的代码
+                            最近用 Coverity Scan 扫描代码，其中对 strncpy 的使用做了警告
+之前知道 C 语言里字符操作坑很多。很多函数不安全，要用带 n 的函数。以为 strcpy 不安全，可以用 strncpy。但实际上 strncpy 用的
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-03-29
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-04-03
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/CI-CD/" class="post-category">
-                                    CI-CD
+                            <a href="/categories/%E5%AE%89%E5%85%A8/" class="post-category">
+                                    安全
                                 </a>
                             
                             
@@ -934,16 +829,16 @@ SET_SOURCE_FILES_
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/golang/">
-                        <span class="chip bg-color">golang</span>
+                    <a href="/tags/C/">
+                        <span class="chip bg-color">C</span>
                     </a>
                     
-                    <a href="/tags/travis/">
-                        <span class="chip bg-color">travis</span>
+                    <a href="/tags/gcc/">
+                        <span class="chip bg-color">gcc</span>
                     </a>
                     
-                    <a href="/tags/CodeClimate/">
-                        <span class="chip bg-color">CodeClimate</span>
+                    <a href="/tags/clang/">
+                        <span class="chip bg-color">clang</span>
                     </a>
                     
                 </div>
