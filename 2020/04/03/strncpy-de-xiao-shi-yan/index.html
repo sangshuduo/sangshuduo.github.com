@@ -520,7 +520,7 @@ int main()
     free(buf);
 
     printf(&quot;strncpy n before: buf1-&gt;begin is %s\n&quot;, buf1-&gt;begin);
-    printf(&quot;strncpy n before: buf1-&gt;begin is %s\n&quot;, buf1-&gt;dst);
+    printf(&quot;strncpy n before: buf1-&gt;dst is %s\n&quot;, buf1-&gt;dst);
     printf(&quot;strncpy n before: buf1-&gt;end is %s\n&quot;, buf1-&gt;end);
     strncpy(buf1-&gt;dst, src, 6);
     printf(&quot;strncpy n after: buf1-&gt;begin is %s\n&quot;, buf1-&gt;begin);
@@ -549,7 +549,7 @@ strncpy n-1 after: buf-&gt;begin is ######abcde#######
 strncpy n-1 after: buf-&gt;dst is abcde#######
 strncpy n-1 after: buf-&gt;end is ######
 strncpy n before: buf1-&gt;begin is ##################
-strncpy n before: buf1-&gt;begin is ############
+strncpy n before: buf1-&gt;dst is ############
 strncpy n before: buf1-&gt;end is ######
 strncpy n after: buf1-&gt;begin is ######abcdef######
 strncpy n after: buf1-&gt;dst is abcdef######
