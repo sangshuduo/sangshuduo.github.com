@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>自动发邮件的方法</title>
+      <link href="/2020/05/24/zi-dong-fa-you-jian-de-fang-fa/"/>
+      <url>/2020/05/24/zi-dong-fa-you-jian-de-fang-fa/</url>
+      
+        <content type="html"><![CDATA[<p>很多年前尝试配置过 sendmail 服务，痛苦的要死，最后也没配成功，从此对服务器端配置邮件相关服务存下了心理阴影。</p><p>最近需要配置自动发邮件，想着这一关总要过去，于是开始重新了解学习如何做，没想到现在用新软件已经可以出奇的简单。</p><p>所以赶紧记录下来：</p><p>使用的软件是 ssmtp，主要有两个配置文件，以我用的 qq 企业邮箱为例：</p><pre><code>## Config file for sSMTP sendmail## The person who gets all mail for userids &lt; 1000# Make this empty to disable rewriting.root=sdsang@taosdata.com# The place where the mail goes. The actual machine name is required no# MX records are consulted. Commonly mailhosts are named mail.domain.commailhub=smtp.exmail.qq.com:587# Where will the mail seem to come from?rewriteDomain=hostname=YOUREMAILADDR#UseSTARTTLS=YESAuthUser=YOUREMAILADDRAuthPass=YOUREMAILPASSWDUseTLS=YESUseSTARTTLS=YES# The full hostname#hostname=perftest.ldj05avpeqiepodwxvbq0py2oh.hx.internal.cloudapp.net# Are users allowed to set their own From: address?# YES - Allow the user to specify their own From: address# NO - Use the system generated From: addressFromLineOverride=YES</code></pre><p>/etc/ssmtp/revaliases</p><pre><code># sSMTP aliases## Format:    local_account:outgoing_address:mailhub## Example: root:your_login@your.domain:mailhub.your.domain[:port]# where [:port] is an optional port number that defaults to 25.root:YOUREMAILADDR:smtp.exmail.qq.com:587</code></pre><p>发送邮件的脚本示例：</p><pre><code>    receiver=&quot;sangshuduo@gmail.com, SOMEONEEMAIL&quot;    echo -e &quot;to: ${receiver}\nsubject: SUBJECT TEXT\n&quot; | \        (cat - &amp;&amp; uuencode ATTCHED_FILE1_NAME ATTACHMENT_FILE1_NAME)| \        (cat - &amp;&amp; uuencode ATTCHED_FILE2_NAME ATTACHMENT_FILE2_NAME)| \        (cat - &amp;&amp; uuencode ATTCHED_FILE3_NAME ATTACHMENT_FILE3_NAME)| \        ssmtp &quot;${receiver}&quot;</code></pre><p>当然也有一些没研究明白的问题，比如如何写 HTML 邮件 body，并被几种主流客户端认对，这里吐槽一下， gmail 识别出来的， Outlook 可能识别有问题，Windows 10 自带的 Mail 干脆不认识附件，而且18年就被用户在官方论坛上吐槽的 Bug 到现在还存在。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> CI-CD </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> ssmtp </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>在 cmake 中为个别文件单独指定编译选项的方法</title>
       <link href="/2020/04/06/zai-cmake-zhong-wei-ge-bie-wen-jian-dan-du-zhi-ding-bian-yi-xuan-xiang-de-fang-fa/"/>
       <url>/2020/04/06/zai-cmake-zhong-wei-ge-bie-wen-jian-dan-du-zhi-ding-bian-yi-xuan-xiang-de-fang-fa/</url>

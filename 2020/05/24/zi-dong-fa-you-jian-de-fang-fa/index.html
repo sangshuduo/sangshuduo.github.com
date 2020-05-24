@@ -4,9 +4,10 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="在 cmake 中为个别文件单独指定编译选项的方法, Shuduo&#39;s Blog">
-    <meta name="description" content="搜能搜到 StackOverflow 上很多回复，实际用还是尝试了一下午。重点是要在合适的目录下的 CMakeLists.txt 中改，并且要带合适的路径。因为折腾的时间比较多，赶紧记下来，免得想不起来。
-SET_SOURCE_FILES_">
+    <meta name="keywords" content="自动发邮件的方法, Shuduo&#39;s Blog">
+    <meta name="description" content="很多年前尝试配置过 sendmail 服务，痛苦的要死，最后也没配成功，从此对服务器端配置邮件相关服务存下了心理阴影。
+最近需要配置自动发邮件，想着这一关总要过去，于是开始重新了解学习如何做，没想到现在用新软件已经可以出奇的简单。
+所以赶紧">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -14,7 +15,7 @@ SET_SOURCE_FILES_">
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>在 cmake 中为个别文件单独指定编译选项的方法 | Shuduo&#39;s Blog</title>
+    <title>自动发邮件的方法 | Shuduo&#39;s Blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -305,12 +306,12 @@ SET_SOURCE_FILES_">
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/1.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/21.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">在 cmake 中为个别文件单独指定编译选项的方法</h1>
+                    <h1 class="description center-align post-title">自动发邮件的方法</h1>
                 </div>
             </div>
         </div>
@@ -427,12 +428,8 @@ SET_SOURCE_FILES_">
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/compiler/">
-                                <span class="chip bg-color">compiler</span>
-                            </a>
-                        
-                            <a href="/tags/cmake/">
-                                <span class="chip bg-color">cmake</span>
+                            <a href="/tags/ssmtp/">
+                                <span class="chip bg-color">ssmtp</span>
                             </a>
                         
                     </div>
@@ -456,7 +453,7 @@ SET_SOURCE_FILES_">
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2020-04-06
+                    2020-05-24
                 </div>
                 
 
@@ -473,8 +470,50 @@ SET_SOURCE_FILES_">
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>搜能搜到 StackOverflow 上很多回复，实际用还是尝试了一下午。<br>重点是要在合适的目录下的 CMakeLists.txt 中改，并且要带合适的路径。<br>因为折腾的时间比较多，赶紧记下来，免得想不起来。</p>
-<p>SET_SOURCE_FILES_PROPERTIES(src/sql.c PROPERTIES COMPILE_FLAGS -w)</p>
+                <p>很多年前尝试配置过 sendmail 服务，痛苦的要死，最后也没配成功，从此对服务器端配置邮件相关服务存下了心理阴影。</p>
+<p>最近需要配置自动发邮件，想着这一关总要过去，于是开始重新了解学习如何做，没想到现在用新软件已经可以出奇的简单。</p>
+<p>所以赶紧记录下来：</p>
+<p>使用的软件是 ssmtp，主要有两个配置文件，以我用的 qq 企业邮箱为例：</p>
+<pre><code>#
+# Config file for sSMTP sendmail
+#
+# The person who gets all mail for userids &lt; 1000
+# Make this empty to disable rewriting.
+root=sdsang@taosdata.com
+# The place where the mail goes. The actual machine name is required no
+# MX records are consulted. Commonly mailhosts are named mail.domain.com
+mailhub=smtp.exmail.qq.com:587
+
+# Where will the mail seem to come from?
+rewriteDomain=hostname=YOUREMAILADDR
+#UseSTARTTLS=YES
+AuthUser=YOUREMAILADDR
+AuthPass=YOUREMAILPASSWD
+UseTLS=YES
+UseSTARTTLS=YES
+
+
+# The full hostname
+#hostname=perftest.ldj05avpeqiepodwxvbq0py2oh.hx.internal.cloudapp.net
+
+# Are users allowed to set their own From: address?
+# YES - Allow the user to specify their own From: address
+# NO - Use the system generated From: address
+FromLineOverride=YES</code></pre><p>/etc/ssmtp/revaliases</p>
+<pre><code># sSMTP aliases
+#
+# Format:    local_account:outgoing_address:mailhub
+#
+# Example: root:your_login@your.domain:mailhub.your.domain[:port]
+# where [:port] is an optional port number that defaults to 25.
+root:YOUREMAILADDR:smtp.exmail.qq.com:587</code></pre><p>发送邮件的脚本示例：</p>
+<pre><code>    receiver=&quot;sangshuduo@gmail.com, SOMEONEEMAIL&quot;
+
+    echo -e &quot;to: ${receiver}\nsubject: SUBJECT TEXT\n&quot; | \
+        (cat - &amp;&amp; uuencode ATTCHED_FILE1_NAME ATTACHMENT_FILE1_NAME)| \
+        (cat - &amp;&amp; uuencode ATTCHED_FILE2_NAME ATTACHMENT_FILE2_NAME)| \
+        (cat - &amp;&amp; uuencode ATTCHED_FILE3_NAME ATTACHMENT_FILE3_NAME)| \
+        ssmtp &quot;${receiver}&quot;</code></pre><p>当然也有一些没研究明白的问题，比如如何写 HTML 邮件 body，并被几种主流客户端认对，这里吐槽一下， gmail 识别出来的， Outlook 可能识别有问题，Windows 10 自带的 Mail 干脆不认识附件，而且18年就被用户在官方论坛上吐槽的 Bug 到现在还存在。</p>
 
             </div>
             <hr/>
@@ -500,7 +539,7 @@ SET_SOURCE_FILES_">
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://sangshuduo.github.io/2020/04/06/zai-cmake-zhong-wei-ge-bie-wen-jian-dan-du-zhi-ding-bian-yi-xuan-xiang-de-fang-fa/">http://sangshuduo.github.io/2020/04/06/zai-cmake-zhong-wei-ge-bie-wen-jian-dan-du-zhi-ding-bian-yi-xuan-xiang-de-fang-fa/</a>
+                    <a href="http://sangshuduo.github.io/2020/05/24/zi-dong-fa-you-jian-de-fang-fa/">http://sangshuduo.github.io/2020/05/24/zi-dong-fa-you-jian-de-fang-fa/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -538,12 +577,8 @@ SET_SOURCE_FILES_">
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/compiler/">
-                                    <span class="chip bg-color">compiler</span>
-                                </a>
-                            
-                                <a href="/tags/cmake/">
-                                    <span class="chip bg-color">cmake</span>
+                                <a href="/tags/ssmtp/">
+                                    <span class="chip bg-color">ssmtp</span>
                                 </a>
                             
                         </div>
@@ -709,9 +744,9 @@ SET_SOURCE_FILES_">
 
 <script type="text/javascript">
     disqus_config = function () {
-        this.page.url = 'http://sangshuduo.github.io/2020/04/06/zai-cmake-zhong-wei-ge-bie-wen-jian-dan-du-zhi-ding-bian-yi-xuan-xiang-de-fang-fa/';
-        this.page.identifier = '/2020/04/06/zai-cmake-zhong-wei-ge-bie-wen-jian-dan-du-zhi-ding-bian-yi-xuan-xiang-de-fang-fa/';
-        this.page.title = '在 cmake 中为个别文件单独指定编译选项的方法';
+        this.page.url = 'http://sangshuduo.github.io/2020/05/24/zi-dong-fa-you-jian-de-fang-fa/';
+        this.page.identifier = '/2020/05/24/zi-dong-fa-you-jian-de-fang-fa/';
+        this.page.title = '自动发邮件的方法';
     };
     let disqus_shortname = 'shuduos-blog';
 
@@ -734,9 +769,10 @@ SET_SOURCE_FILES_">
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
                 <a href="/2020/05/24/zi-dong-fa-you-jian-de-fang-fa/">
                     <div class="card-image">
@@ -756,9 +792,9 @@ SET_SOURCE_FILES_">
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2020-05-24
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-05-24
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -771,6 +807,7 @@ SET_SOURCE_FILES_">
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -789,32 +826,32 @@ SET_SOURCE_FILES_">
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2020/04/03/strncpy-de-xiao-shi-yan/">
+                <a href="/2020/04/06/zai-cmake-zhong-wei-ge-bie-wen-jian-dan-du-zhi-ding-bian-yi-xuan-xiang-de-fang-fa/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/14.jpg" class="responsive-img" alt="strncpy 的小实验">
+                        <img src="/medias/featureimages/1.jpg" class="responsive-img" alt="在 cmake 中为个别文件单独指定编译选项的方法">
                         
-                        <span class="card-title">strncpy 的小实验</span>
+                        <span class="card-title">在 cmake 中为个别文件单独指定编译选项的方法</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            最近用 Coverity Scan 扫描代码，其中对 strncpy 的使用做了警告
-之前知道 C 语言里字符操作坑很多。很多函数不安全，要用带 n 的函数。以为 strcpy 不安全，可以用 strncpy。但实际上 strncpy 用的
+                            搜能搜到 StackOverflow 上很多回复，实际用还是尝试了一下午。重点是要在合适的目录下的 CMakeLists.txt 中改，并且要带合适的路径。因为折腾的时间比较多，赶紧记下来，免得想不起来。
+SET_SOURCE_FILES_
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-04-03
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-04-06
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E5%AE%89%E5%85%A8/" class="post-category">
-                                    安全
+                            <a href="/categories/CI-CD/" class="post-category">
+                                    CI-CD
                                 </a>
                             
                             
@@ -824,16 +861,12 @@ SET_SOURCE_FILES_">
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/C/">
-                        <span class="chip bg-color">C</span>
+                    <a href="/tags/compiler/">
+                        <span class="chip bg-color">compiler</span>
                     </a>
                     
-                    <a href="/tags/gcc/">
-                        <span class="chip bg-color">gcc</span>
-                    </a>
-                    
-                    <a href="/tags/clang/">
-                        <span class="chip bg-color">clang</span>
+                    <a href="/tags/cmake/">
+                        <span class="chip bg-color">cmake</span>
                     </a>
                     
                 </div>
